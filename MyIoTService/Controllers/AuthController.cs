@@ -38,7 +38,7 @@ namespace MyIoTService.Controllers
         /// </summary>
         /// <returns>Json Object containing user object</returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest model)
+        public async Task<IActionResult> Register(UserRegisterRequest model)
         {
             if (model != null)
             {

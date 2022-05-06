@@ -1,6 +1,6 @@
 ﻿namespace MyIoTService.Models
 {
-    public class RegisterRequest
+    public class UserRegisterRequest
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
