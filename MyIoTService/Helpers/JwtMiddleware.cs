@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyIoTService.Services;
+using MyIoTService.Repository;
 
 namespace MyIoTService.Helpers
 {
@@ -21,17 +21,17 @@ namespace MyIoTService.Helpers
             _appSettings = appSettings.Value;
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService)
+        public async Task Invoke(HttpContext context, IEndUserRepository endUserRepository)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                attachUserToContext(context, userService, token);
+                await attachUserToContext(context, endUserRepository, token);
 
             await _next(context);
         }
 
-        private void attachUserToContext(HttpContext context, IUserService userService, string token)
+        private async Task attachUserToContext(HttpContext context, IEndUserRepository endUserRepository, string token)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace MyIoTService.Helpers
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 // attach user to context on successful jwt validation
-                context.Items["EndUser"] = userService.GetById(userId);
+                context.Items["EndUser"] = await endUserRepository.GetUser(userId);
             }
             catch
             {

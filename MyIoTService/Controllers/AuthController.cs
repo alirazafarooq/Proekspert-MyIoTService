@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyIoTService.Entities;
 using MyIoTService.Helpers;
 using MyIoTService.Models;
-using MyIoTService.Services;
+using MyIoTService.Repository;
+using System.Threading.Tasks;
 
 namespace MyIoTService.Controllers
 {
@@ -9,11 +11,11 @@ namespace MyIoTService.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IUserService _userService;
+        private IEndUserRepository _endUserRepository;
 
-        public AuthController(IUserService userService)
+        public AuthController(IEndUserRepository endUserRepository)
         {
-            _userService = userService;
+            _endUserRepository = endUserRepository;
         }
 
         /// <summary>
@@ -21,9 +23,9 @@ namespace MyIoTService.Controllers
         /// </summary>
         /// <returns>Json Object containing user object and respective token</returns>
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest model)
+        public async Task<IActionResult> Authenticate(AuthenticateRequest model)
         {
-            var response = _userService.Authenticate(model);
+            var response = await _endUserRepository.Authenticate(model);
 
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -32,14 +34,39 @@ namespace MyIoTService.Controllers
         }
 
         /// <summary>
+        /// This endpoint is responsible to register the new user in MyIoTService.
+        /// </summary>
+        /// <returns>Json Object containing user object</returns>
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterRequest model)
+        {
+            if (model != null)
+            {
+                var entity = new EndUser()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Password = model.Password,
+                    Username = model.Username,
+                };
+                var response = await _endUserRepository.AddUser(entity);
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
         /// This endpoint is responsible to return all the users stored in the database
         /// </summary>
         /// <returns>A string object (Welcome message)</returns>
         [Authorize]
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var users = _userService.GetAll();
+            var users = await _endUserRepository.GetUsers();
             return Ok(users);
         }
     }
