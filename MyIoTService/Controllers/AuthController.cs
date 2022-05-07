@@ -38,18 +38,11 @@ namespace MyIoTService.Controllers
         /// </summary>
         /// <returns>Json Object containing user object</returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterRequest model)
+        public async Task<IActionResult> Register(UserModel model)
         {
             if (model != null)
             {
-                var entity = new EndUser()
-                {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Password = model.Password,
-                    Username = model.Username,
-                };
-                var response = await _endUserRepository.AddUser(entity);
+                var response = await _endUserRepository.AddUser(model);
                 return Ok(response);
             }
             else
@@ -66,6 +59,7 @@ namespace MyIoTService.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            var user = (EndUser)HttpContext.Items["EndUser"];
             var users = await _endUserRepository.GetUsers();
             return Ok(users);
         }

@@ -7,10 +7,10 @@ namespace MyIoTService.Repository
 {
     public interface IEndUserRepository
     {
-        Task<IEnumerable<EndUser>> GetUsers();
-        Task<EndUser> GetUser(int id);
-        Task<EndUser> AddUser(EndUser endUser);
-        Task<EndUser> UpdateUser(EndUser endUser);
+        Task<IEnumerable<UserModel>> GetUsers();
+        Task<UserModel> GetUser(int id);
+        Task<UserModel> AddUser(UserModel endUser);
+        Task<UserModel> UpdateUser(UserModel endUser);
         Task DeleteUser(int id);
         Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
     }

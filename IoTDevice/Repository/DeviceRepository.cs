@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace IoTDevice.Repository
 {
@@ -16,11 +17,11 @@ namespace IoTDevice.Repository
             ioTDeviceDBContext = dBContext;
         }
 
-        public async Task AddDevice(Device device)
+        public async Task AddDevice(DeviceRequest device)
         {
             if (device != null)
             {
-                await ioTDeviceDBContext.devices.AddAsync(device);
+                await ioTDeviceDBContext.devices.AddAsync(device.DeviceEntity());
                 await ioTDeviceDBContext.SaveChangesAsync();
             }
         }
@@ -35,12 +36,12 @@ namespace IoTDevice.Repository
             }
         }
 
-        public async Task<DeviceModel> GetDevice(int id)
+        public async Task<DeviceResponse> GetDevice(int id)
         {
             var device = await ioTDeviceDBContext.devices.FindAsync(id);
             if (device != null)
             {
-                return new DeviceModel().DeviceModelFrom(device);
+                return new DeviceResponse().DeviceModelFrom(device);
             }
             else
             {
@@ -48,15 +49,15 @@ namespace IoTDevice.Repository
             }
         }
 
-        public async Task<IEnumerable<DeviceModel>> GetDevices()
+        public async Task<IEnumerable<DeviceResponse>> GetDevices()
         {
             var devices = await ioTDeviceDBContext.devices.ToListAsync();
-            return devices.Select(d => new DeviceModel().DeviceModelFrom(d));
+            return devices.Select(d => new DeviceResponse().DeviceModelFrom(d));
         }
 
-        public async Task UpdateDevice(Device device)
+        public async Task UpdateDevice(DeviceRequest device)
         {
-            ioTDeviceDBContext.Update(device);
+            ioTDeviceDBContext.Update(device.DeviceEntity());
             await ioTDeviceDBContext.SaveChangesAsync();
         }
     }

@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MyIoTService.Repository
 {
@@ -23,7 +24,7 @@ namespace MyIoTService.Repository
             _appSettings = appSettings.Value;
             _myDbContext = myDBContext;
         }
-        public async Task<EndUser> AddUser(EndUser endUser)
+        public async Task<UserModel> AddUser(UserModel endUser)
         {
             _myDbContext.Add(endUser);
             await _myDbContext.SaveChangesAsync();
@@ -40,21 +41,22 @@ namespace MyIoTService.Repository
             }
         }
 
-        public async Task<EndUser> GetUser(int id)
+        public async Task<UserModel> GetUser(int id)
         {
-            return await _myDbContext.EndUsers.FirstOrDefaultAsync(c => c.Id == id);
+            var user = await _myDbContext.EndUsers.FirstOrDefaultAsync(c => c.Id == id);
+            return new UserModel(user);
         }
 
-        public async Task<IEnumerable<EndUser>> GetUsers()
+        public async Task<IEnumerable<UserModel>> GetUsers()
         {
-            return await _myDbContext.EndUsers.ToListAsync();
+            return await _myDbContext.EndUsers.Select(u => new UserModel(u)).ToListAsync();
         }
 
-        public async Task<EndUser> UpdateUser(EndUser endUser)
+        public async Task<UserModel> UpdateUser(UserModel endUser)
         {
             if (endUser != null)
             {
-                _myDbContext.Update(endUser);
+                _myDbContext.Update(endUser.EndUserEntity());
                 await _myDbContext.SaveChangesAsync();
             }
             return endUser;

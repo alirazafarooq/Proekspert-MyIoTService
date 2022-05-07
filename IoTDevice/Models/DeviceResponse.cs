@@ -1,8 +1,9 @@
 ﻿using IoTDevice.Entities;
+using System;
 
 namespace IoTDevice.Models
 {
-    public class DeviceModel
+    public class DeviceResponse
     {
         public int SerialNumber { get; set; }
 
@@ -24,17 +25,17 @@ namespace IoTDevice.Models
 
         public bool MachineIsBroken { get; set; }
 
-        public DeviceModel DeviceModelFrom(Device device)
+        public DeviceResponse DeviceModelFrom(Device device)
         {
             var fakeData = DeviceFakeData.FakeData.Generate();
-            return new DeviceModel()
+            return new DeviceResponse()
             {
                 SerialNumber = device.SerialNumber,
                 HasOutsideTemperature = device.HasOutsideTemperature,
                 IsOperational = device.IsOperational,
                 MachineIsBroken = device.MachineIsBroken,
-                OperationTimeInHour = device.OperationTimeInHour,
-                OperationTimeInSec = device.OperationTimeInSec,
+                OperationTimeInHour = Convert.ToInt32(DateTime.UtcNow.Subtract(device.DeviceStartTime).TotalHours),
+                OperationTimeInSec = Convert.ToInt32(DateTime.UtcNow.Subtract(device.DeviceStartTime).TotalSeconds),
                 SilentMode = device.SilentMode,
                 InsideTemperature = fakeData.InsideTemperature,
                 OutsideTemperature = fakeData.OutsideTemperature,
