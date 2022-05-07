@@ -1,20 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MyIoTService.Database;
 using MyIoTService.Helpers;
-using MyIoTService.Services;
+using MyIoTService.Repository;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace MyIoTService
 {
@@ -30,6 +26,7 @@ namespace MyIoTService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<IoTServiceDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnectionString")));
             services.AddCors();
             services.AddControllers();
 
@@ -79,7 +76,7 @@ namespace MyIoTService
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             // configure DI for application services
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEndUserRepository, EndUserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

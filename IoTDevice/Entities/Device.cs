@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IoTDevice.Entities
@@ -12,9 +13,7 @@ namespace IoTDevice.Entities
 
         public bool HasOutsideTemperature { get; set; }
 
-        public int OperationTimeInSec { get; set; }
-
-        public int OperationTimeInHour { get; set; }
+        public DateTime DeviceStartTime { get; set; }
 
         public bool IsOperational { get; set; }
 

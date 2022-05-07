@@ -1,5 +1,6 @@
 ﻿using IoTDevice.Database;
 using IoTDevice.Entities;
+using IoTDevice.Models;
 using IoTDevice.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,14 +34,14 @@ namespace IoTDevice.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddDevice(Device device)
+        public async Task<IActionResult> AddDevice(DeviceRequest device)
         {
             await deviceRepository.AddDevice(device);
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateDevice(Device device)
+        public async Task<IActionResult> UpdateDevice(DeviceRequest device)
         {
             await deviceRepository.UpdateDevice(device);
             return Ok();
