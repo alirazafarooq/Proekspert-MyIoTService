@@ -50,7 +50,10 @@ namespace IoTDevice
                 });
                 c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
                 {
-                    Description = "ApiKey must appear in header",
+                    Description = "ApiKey must appear in header\n" 
+                    + "\"XApiKey\": \"pgH7QzFHJx4w46fI~5Uzi4RvtTwlEXp\"\n"
+                    + "Write above Api Key in bellow textbox to authorise requests\n"
+                    + "Note: Im providing this Api Key here for the sake of ease to you only.",
                     Type = SecuritySchemeType.ApiKey,
                     Name = "XApiKey",
                     In = ParameterLocation.Header,

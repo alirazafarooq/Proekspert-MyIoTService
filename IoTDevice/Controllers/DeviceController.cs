@@ -1,5 +1,6 @@
 ﻿using IoTDevice.Database;
 using IoTDevice.Entities;
+using IoTDevice.Exceptions;
 using IoTDevice.Models;
 using IoTDevice.Repository;
 using Microsoft.AspNetCore.Http;
@@ -30,28 +31,57 @@ namespace IoTDevice.Controllers
         public async Task<IActionResult> GetDevice(int id)
         {
             var result = await deviceRepository.GetDevice(id);
-            return new OkObjectResult(result);
+            if (result != null)
+            {
+                return new OkObjectResult(result);
+            }
+            else
+            {
+                return new BadRequestObjectResult(new DeviceNotFoundMessage());
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> AddDevice(DeviceRequest device)
         {
-            await deviceRepository.AddDevice(device);
-            return Ok();
+            var result = await deviceRepository.AddDevice(device);
+            if (result != null)
+            {
+                return new OkObjectResult(result);
+            }
+            else
+            {
+                return new BadRequestObjectResult(new DeviceCouldNotRegisterMessage());
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateDevice(DeviceRequest device)
         {
-            await deviceRepository.UpdateDevice(device);
-            return Ok();
+            var result = await deviceRepository.UpdateDevice(device);
+            if (result != null)
+            {
+                return new OkObjectResult(result);
+            }
+            else
+            {
+                return new BadRequestObjectResult(new DeviceCouldNotUpdateMessage());
+            }
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteDevice(int id)
         {
-            await deviceRepository.DeleteDevice(id);
-            return Ok();
+
+            var result = await deviceRepository.DeleteDevice(id);
+            if (result != null)
+            {
+                return new OkObjectResult(result);
+            }
+            else
+            {
+                return new BadRequestObjectResult(new DeviceCouldNotDeleteMessage());
+            }
         }
     }
 }

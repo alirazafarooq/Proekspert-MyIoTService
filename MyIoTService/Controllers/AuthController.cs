@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MyIoTService.Entities;
 using MyIoTService.Helpers;
 using MyIoTService.Models;
@@ -47,6 +48,7 @@ namespace MyIoTService.Controllers
             }
             else
             {
+                //return new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
                 return BadRequest();
             }
         }
