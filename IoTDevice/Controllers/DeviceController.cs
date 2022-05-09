@@ -1,9 +1,7 @@
 ﻿using IoTDevice.Database;
-using IoTDevice.Entities;
 using IoTDevice.Exceptions;
 using IoTDevice.Models;
 using IoTDevice.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -20,7 +18,7 @@ namespace IoTDevice.Controllers
             deviceRepository = new DeviceRepository(dBContext);
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("getall")]
         public async Task<IActionResult> GetDevices()
         {
             var result = await deviceRepository.GetDevices();

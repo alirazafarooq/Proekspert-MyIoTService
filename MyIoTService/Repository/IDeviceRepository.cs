@@ -7,11 +7,11 @@ namespace MyIoTService.Repository
 {
     public interface IDeviceRepository
     {
-        Task<DeviceRegisterResponse> GetDevice(int id, EndUser endUser);
-        Task<IEnumerable<DeviceRegisterResponse>> GetAllDevices(EndUser endUser);
-        Task<DeviceRegisterResponse> AddDevice(DeviceRegisterRequest device, EndUser endUser);
-        Task<DeviceRegisterResponse> UpdateDevice(DeviceRegisterRequest device, EndUser endUser);
-        Task<DeviceRegisterResponse> DeleteDevice(int id, EndUser endUser);
-        Task<DeviceRegisterResponse> FetchCurrentState(int id, EndUser endUser);
+        Task<DeviceRegisterResponse> GetDevice(int id, UserModel endUser);
+        Task<IEnumerable<DeviceRegisterResponse>> GetAllDevices(UserModel endUser);
+        Task<DeviceRegisterResponse> AddDevice(DeviceRegisterRequest device, UserModel endUser);
+        Task<DeviceRegisterResponse> UpdateDevice(DeviceRegisterRequest device, UserModel endUser);
+        Task<DeviceRegisterResponse> DeleteDevice(int id, UserModel endUser);
+        Task<DeviceRegisterResponse> FetchCurrentState(int id, UserModel endUser);
     }
 }
