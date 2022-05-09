@@ -21,6 +21,7 @@ namespace MyIoTService.Controllers
         /// <summary>
         /// This endpoint is responsible to authenticate the user based on Username and Password
         /// </summary>
+        /// /// <param name="model">Json Object contains the username and password only</param>
         /// <returns>Json Object containing user object and respective token</returns>
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(AuthenticateRequest model)
@@ -39,6 +40,7 @@ namespace MyIoTService.Controllers
         /// <summary>
         /// This endpoint is responsible to register the new user in MyIoTService.
         /// </summary>
+        /// /// <param name="model">Json Object contains the data of user</param>
         /// <returns>Json Object containing user object</returns>
         [HttpPost]
         public async Task<IActionResult> Register(UserModel model)
@@ -57,6 +59,7 @@ namespace MyIoTService.Controllers
         /// <summary>
         /// This endpoint is responsible to update the existing user in MyIoTService.
         /// </summary>
+        /// <param name="model">Json Object contains the new data of user</param>
         /// <returns>Json Object containing user object</returns>
         [Authorize]
         [HttpPut]
@@ -76,7 +79,8 @@ namespace MyIoTService.Controllers
         /// <summary>
         /// This endpoint is responsible to delete the existing user in MyIoTService.
         /// </summary>
-        /// <returns>Json Object containing user object</returns>
+        /// <param name="id">Integer value representing user id</param>
+        /// <returns>Json object contains user data</returns>
         [Authorize]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
@@ -95,6 +99,7 @@ namespace MyIoTService.Controllers
         /// <summary>
         /// This endpoint is responsible to get the existing user in MyIoTService.
         /// </summary>
+        /// <param name="id">Integer value representing user id</param>
         /// <returns>Json Object containing user object</returns>
         [Authorize]
         [HttpGet]
@@ -114,7 +119,7 @@ namespace MyIoTService.Controllers
         /// <summary>
         /// This endpoint is responsible to return all the users stored in the database
         /// </summary>
-        /// <returns>A string object (Welcome message)</returns>
+        /// <returns>Json object contains list of all the users</returns>
         [Authorize]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()

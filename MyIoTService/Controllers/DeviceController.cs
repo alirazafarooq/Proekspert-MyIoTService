@@ -20,6 +20,10 @@ namespace MyIoTService.Controllers
             this.deviceRepository = deviceRepository;
         }
 
+        /// <summary>
+        /// This method is responsible to get all the devices of the respected user who is currently logged in.
+        /// </summary>
+        /// <returns>Json Object contains a list of registered devices</returns>
         [Authorize]
         [HttpGet("getall")]
         public async Task<IActionResult> GetDevices()
@@ -29,6 +33,11 @@ namespace MyIoTService.Controllers
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// This method is resposible to fetch the current IoT device data and update this data into local database
+        /// </summary>
+        /// <param name="id">Integer value representing the device seriel number</param>
+        /// <returns>Json Object contains the current device data</returns>
         [Authorize]
         [HttpGet("fetchcurrentstate")]
         public async Task<IActionResult> FetchCurrentState(int id)
@@ -45,6 +54,11 @@ namespace MyIoTService.Controllers
             }
         }
 
+        /// <summary>
+        /// Thid method is responsible to get the IoT device data stored in local database
+        /// </summary>
+        /// <param name="id">Integer value representing the device seriel number</param>
+        /// <returns>Json Object contains the data of IoT device</returns>
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetDevice(int id)
@@ -61,6 +75,11 @@ namespace MyIoTService.Controllers
             }
         }
 
+        /// <summary>
+        /// This method is reponsible to register a new device in database
+        /// </summary>
+        /// <param name="device">Json Object contains the data of IoT device</param>
+        /// <returns>Json Object contains the data of IoT device</returns>
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddDevice(DeviceRegisterRequest device)
@@ -77,6 +96,11 @@ namespace MyIoTService.Controllers
             }
         }
 
+        /// <summary>
+        /// This method is reponsible to update the device data both in local database as well as post the data to IoT device.
+        /// </summary>
+        /// <param name="device">Json Object contains the data of IoT device</param>
+        /// <returns>Json Object contains the data of IoT device</returns>
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateDevice(DeviceRegisterRequest device)
@@ -93,6 +117,11 @@ namespace MyIoTService.Controllers
             }
         }
 
+        /// <summary>
+        /// This method is responsible to delete the existing IoT device.
+        /// </summary>
+        /// <param name="id">Integer value representing the device seriel number</param>
+        /// <returns>Json Object contains the data of IoT device</returns>
         [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteDevice(int id)
