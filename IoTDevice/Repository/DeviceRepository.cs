@@ -76,7 +76,7 @@ namespace IoTDevice.Repository
         {
             try
             {
-                var result = ioTDeviceDBContext.Update(device.DeviceEntity());
+                var result = ioTDeviceDBContext.devices.Update(device.DeviceEntity());
                 await ioTDeviceDBContext.SaveChangesAsync();
                 return new DeviceResponse().DeviceModelFrom(result.Entity);
             }

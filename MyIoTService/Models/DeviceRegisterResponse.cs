@@ -1,4 +1,6 @@
-﻿namespace MyIoTService.Models
+﻿using MyIoTService.Entities;
+
+namespace MyIoTService.Models
 {
     public class DeviceRegisterResponse
     {
@@ -21,5 +23,38 @@
         public bool SilentMode { get; set; }
 
         public bool MachineIsBroken { get; set; }
+
+        public DeviceRegisterResponse() { }
+        public DeviceRegisterResponse(Device device)
+        {
+            SerialNumber = device.SerialNumber;
+            InsideTemperature = device.InsideTemperature;
+            OutsideTemperature = device.OutsideTemperature;
+            HasOutsideTemperature = device.HasOutsideTemperature;
+            WaterTemperature = device.WaterTemperature;
+            OperationTimeInSec = device.OperationTimeInSec;
+            OperationTimeInHour = device.OperationTimeInHour;
+            IsOperational = device.IsOperational;
+            SilentMode = device.SilentMode;
+            MachineIsBroken = device.MachineIsBroken;
+        }
+        public Device DeviceEntity(EndUser endUser)
+        {
+            return new Device()
+            {
+                EndUser = endUser,
+                UserId = endUser.Id,
+                HasOutsideTemperature = HasOutsideTemperature,
+                InsideTemperature = InsideTemperature,
+                IsOperational = IsOperational,
+                MachineIsBroken = MachineIsBroken,
+                OperationTimeInHour = OperationTimeInHour,
+                OperationTimeInSec = OperationTimeInSec,
+                OutsideTemperature = OutsideTemperature,
+                SerialNumber = SerialNumber,
+                SilentMode = SilentMode,
+                WaterTemperature = WaterTemperature
+            };
+        }
     }
 }

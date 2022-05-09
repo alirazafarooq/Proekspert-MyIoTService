@@ -18,5 +18,9 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\Device\" />
+  </ItemGroup>
+
 
 </Project>
