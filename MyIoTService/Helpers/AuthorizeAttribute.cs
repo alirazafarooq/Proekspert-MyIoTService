@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using MyIoTService.Entities;
+using MyIoTService.Models;
 
 namespace MyIoTService.Helpers
 {
@@ -11,7 +11,7 @@ namespace MyIoTService.Helpers
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (EndUser)context.HttpContext.Items["EndUser"];
+            var user = (UserModel)context.HttpContext.Items["EndUser"];
             if (user == null)
             {
                 // not logged in

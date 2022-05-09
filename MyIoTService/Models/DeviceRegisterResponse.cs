@@ -38,11 +38,10 @@ namespace MyIoTService.Models
             SilentMode = device.SilentMode;
             MachineIsBroken = device.MachineIsBroken;
         }
-        public Device DeviceEntity(EndUser endUser)
+        public Device DeviceEntity(UserModel endUser)
         {
             return new Device()
             {
-                EndUser = endUser,
                 UserId = endUser.Id,
                 HasOutsideTemperature = HasOutsideTemperature,
                 InsideTemperature = InsideTemperature,

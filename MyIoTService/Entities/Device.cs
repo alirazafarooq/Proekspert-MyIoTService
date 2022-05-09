@@ -5,8 +5,8 @@ namespace MyIoTService.Entities
 {
     public class Device
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SerialNumber { get; set; }
 
         public int InsideTemperature { get; set; }

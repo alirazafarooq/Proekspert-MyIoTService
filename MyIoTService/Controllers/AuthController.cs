@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MyIoTService.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using MyIoTService.Exceptions.EndUsers;
 using MyIoTService.Helpers;
 using MyIoTService.Models;
@@ -60,6 +58,7 @@ namespace MyIoTService.Controllers
         /// This endpoint is responsible to update the existing user in MyIoTService.
         /// </summary>
         /// <returns>Json Object containing user object</returns>
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(UserModel model)
         {
@@ -78,6 +77,7 @@ namespace MyIoTService.Controllers
         /// This endpoint is responsible to delete the existing user in MyIoTService.
         /// </summary>
         /// <returns>Json Object containing user object</returns>
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
@@ -96,6 +96,7 @@ namespace MyIoTService.Controllers
         /// This endpoint is responsible to get the existing user in MyIoTService.
         /// </summary>
         /// <returns>Json Object containing user object</returns>
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUser(int id)
         {

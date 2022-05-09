@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using MyIoTService.Database;
 using MyIoTService.Helpers;
 using MyIoTService.Repository;
+using MyIoTService.Services;
 using System;
 using System.IO;
 using System.Reflection;
@@ -78,6 +79,7 @@ namespace MyIoTService
             // configure DI for application services
             services.AddScoped<IEndUserRepository, EndUserRepository>();
             services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<IDeviceIntegrationService, DeviceIntegrationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
