@@ -1,53 +1,120 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyIoTService.Database;
 using MyIoTService.Entities;
+using MyIoTService.Models;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MyIoTService.Repository
 {
     public class DeviceRepository : IDeviceRepository
     {
-        private readonly IoTServiceDBContext _myDbContext;
-        public DeviceRepository(IoTServiceDBContext myDBContext)
+        private readonly IoTServiceDBContext ioTServiceDbContext;
+        public DeviceRepository(IoTServiceDBContext dBContext)
         {
-            _myDbContext = myDBContext;
+            ioTServiceDbContext = dBContext;
         }
 
-        public async Task<Device> AddDevice(Device device)
+        public async Task<DeviceRegisterResponse> AddDevice(DeviceRegisterRequest device, EndUser endUser)
         {
-            _myDbContext.Add(device);
-            await _myDbContext.SaveChangesAsync();
-            return device;
-        }
-
-        public async Task DeleteDevice(int id)
-        {
-            var device = await _myDbContext.Devices.FindAsync(id);
-            if (device != null)
+            try
             {
-                _myDbContext.Devices.Remove(device);
-                await _myDbContext.SaveChangesAsync();
+                //Implement Device Integration Service Response
+                var response = new DeviceRegisterResponse();
+                //---------------------------------------------
+
+                var result = await ioTServiceDbContext.Devices.AddAsync(response.DeviceEntity(endUser));
+                await ioTServiceDbContext.SaveChangesAsync();
+                return new DeviceRegisterResponse(result.Entity);
+
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
-        public Task<Device> FetchCurrentState(int id)
+        public async Task<DeviceRegisterResponse> DeleteDevice(int id, EndUser endUser)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<Device> GetDevice(int id)
-        {
-            return await _myDbContext.Devices.FirstOrDefaultAsync(c => c.SerialNumber == id);
-        }
-
-        public async Task<Device> UpdateDevice(Device device)
-        {
+            var device = await ioTServiceDbContext.Devices.FindAsync(id);
             if (device != null)
             {
-                _myDbContext.Update(device);
-                await _myDbContext.SaveChangesAsync();
+                try
+                {
+                    //Implement Device Integration Service Response
+                    var response = new DeviceRegisterResponse();
+                    //---------------------------------------------
+
+                    var result = ioTServiceDbContext.Devices.Remove(device);
+                    await ioTServiceDbContext.SaveChangesAsync();
+                    return new DeviceRegisterResponse(result.Entity);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
-            return device;
+            else return null;
+        }
+
+        public async Task<DeviceRegisterResponse> FetchCurrentState(int id, EndUser endUser)
+        {
+            //Implement Device Integration Service Response
+            var response = new DeviceRegisterResponse();
+            //---------------------------------------------
+
+            var result = ioTServiceDbContext.Devices.Update(response.DeviceEntity(endUser));
+            await ioTServiceDbContext.SaveChangesAsync();
+            return new DeviceRegisterResponse(result.Entity);
+        }
+
+        public async Task<IEnumerable<DeviceRegisterResponse>> GetAllDevices(EndUser endUser)
+        {
+            return await ioTServiceDbContext.Devices.Where(d => d.UserId == endUser.Id).Select(d => new DeviceRegisterResponse(d)).ToListAsync();
+        }
+
+        public async Task<DeviceRegisterResponse> GetDevice(int id, EndUser endUser)
+        {
+            var result = await ioTServiceDbContext.Devices.FindAsync(id);
+            if (result != null)
+            {
+                if (result.UserId == endUser.Id)
+                {
+                    return new DeviceRegisterResponse(result);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else return null;
+        }
+
+        public async Task<DeviceRegisterResponse> UpdateDevice(DeviceRegisterRequest device, EndUser endUser)
+        {
+
+            try
+            {
+                var deviceResult = await ioTServiceDbContext.Devices.FindAsync(device.SerialNumber);
+                if (deviceResult.UserId == endUser.Id)
+                {
+                    //Implement Device Integration Service Response
+                    var response = new DeviceRegisterResponse();
+                    //---------------------------------------------
+
+                    var result = ioTServiceDbContext.Devices.Update(response.DeviceEntity(endUser));
+                    await ioTServiceDbContext.SaveChangesAsync();
+                    return new DeviceRegisterResponse(result.Entity);
+                }
+                else return null;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

@@ -17,22 +17,39 @@ namespace IoTDevice.Repository
             ioTDeviceDBContext = dBContext;
         }
 
-        public async Task AddDevice(DeviceRequest device)
+        public async Task<DeviceResponse> AddDevice(DeviceRequest device)
         {
-            if (device != null)
+            try
             {
-                await ioTDeviceDBContext.devices.AddAsync(device.DeviceEntity());
+                var result = await ioTDeviceDBContext.devices.AddAsync(device.DeviceEntity());
                 await ioTDeviceDBContext.SaveChangesAsync();
+                return new DeviceResponse().DeviceModelFrom(result.Entity);
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
-        public async Task DeleteDevice(int id)
+        public async Task<DeviceResponse> DeleteDevice(int id)
         {
             var device = await ioTDeviceDBContext.devices.FindAsync(id);
             if (device != null)
             {
-                ioTDeviceDBContext.devices.Remove(device);
-                await ioTDeviceDBContext.SaveChangesAsync();
+                try
+                {
+                    var result = ioTDeviceDBContext.devices.Remove(device);
+                    await ioTDeviceDBContext.SaveChangesAsync();
+                    return new DeviceResponse().DeviceModelFrom(result.Entity);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -55,10 +72,18 @@ namespace IoTDevice.Repository
             return devices.Select(d => new DeviceResponse().DeviceModelFrom(d));
         }
 
-        public async Task UpdateDevice(DeviceRequest device)
+        public async Task<DeviceResponse> UpdateDevice(DeviceRequest device)
         {
-            ioTDeviceDBContext.Update(device.DeviceEntity());
-            await ioTDeviceDBContext.SaveChangesAsync();
+            try
+            {
+                var result = ioTDeviceDBContext.devices.Update(device.DeviceEntity());
+                await ioTDeviceDBContext.SaveChangesAsync();
+                return new DeviceResponse().DeviceModelFrom(result.Entity);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

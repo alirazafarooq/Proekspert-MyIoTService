@@ -77,6 +77,7 @@ namespace MyIoTService
 
             // configure DI for application services
             services.AddScoped<IEndUserRepository, EndUserRepository>();
+            services.AddScoped<IDeviceRepository, DeviceRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

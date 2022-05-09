@@ -18,61 +18,91 @@ namespace MyIoTService.Repository
     public class EndUserRepository : IEndUserRepository
     {
         private readonly AppSettings _appSettings;
-        private readonly IoTServiceDBContext _myDbContext;
-        public EndUserRepository(IOptions<AppSettings> appSettings, IoTServiceDBContext myDBContext)
+        private readonly IoTServiceDBContext ioTServiceDbContext;
+        public EndUserRepository(IOptions<AppSettings> appSettings, IoTServiceDBContext dBContext)
         {
             _appSettings = appSettings.Value;
-            _myDbContext = myDBContext;
+            ioTServiceDbContext = dBContext;
         }
         public async Task<UserModel> AddUser(UserModel endUser)
         {
-            _myDbContext.Add(endUser);
-            await _myDbContext.SaveChangesAsync();
-            return endUser;
+            try
+            {
+                var result = await ioTServiceDbContext.EndUsers.AddAsync(endUser.EndUserEntity());
+                await ioTServiceDbContext.SaveChangesAsync();
+                return new UserModel(result.Entity);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
-        public async Task DeleteUser(int id)
+        public async Task<UserModel> DeleteUser(int id)
         {
-            var user = await _myDbContext.EndUsers.FindAsync(id);
+            var user = await ioTServiceDbContext.EndUsers.FindAsync(id);
             if (user != null)
             {
-                _myDbContext.EndUsers.Remove(user);
-                await _myDbContext.SaveChangesAsync();
+                try
+                {
+                    var result = ioTServiceDbContext.EndUsers.Remove(user);
+                    await ioTServiceDbContext.SaveChangesAsync();
+                    return new UserModel(result.Entity);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
+            else return null;
         }
 
         public async Task<UserModel> GetUser(int id)
         {
-            var user = await _myDbContext.EndUsers.FirstOrDefaultAsync(c => c.Id == id);
-            return new UserModel(user);
+            var user = await ioTServiceDbContext.EndUsers.FirstOrDefaultAsync(c => c.Id == id);
+            if (user != null)
+            {
+                return new UserModel(user);
+            }
+            else return null;
         }
 
         public async Task<IEnumerable<UserModel>> GetUsers()
         {
-            return await _myDbContext.EndUsers.Select(u => new UserModel(u)).ToListAsync();
+            return await ioTServiceDbContext.EndUsers.Select(u => new UserModel(u)).ToListAsync();
         }
 
         public async Task<UserModel> UpdateUser(UserModel endUser)
         {
-            if (endUser != null)
+            try
             {
-                _myDbContext.Update(endUser.EndUserEntity());
-                await _myDbContext.SaveChangesAsync();
+                var result = ioTServiceDbContext.EndUsers.Update(endUser.EndUserEntity());
+                await ioTServiceDbContext.SaveChangesAsync();
+                return new UserModel(result.Entity);
             }
-            return endUser;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
         {
-            var user = await _myDbContext.EndUsers.FirstOrDefaultAsync(c => c.Username == model.Username && c.Password == model.Password);
+            try
+            {
+                var user = await ioTServiceDbContext.EndUsers.FirstOrDefaultAsync(c => c.Username == model.Username && c.Password == model.Password);
 
-            // return null if user not found
-            if (user == null) return null;
-
-            // authentication successful so generate jwt token
-            var token = generateJwtToken(user);
-
-            return new AuthenticateResponse(user, token);
+                if (user != null)
+                {
+                    var token = generateJwtToken(user);
+                    return new AuthenticateResponse(user, token);
+                }
+                else return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         // helper method

@@ -7,11 +7,11 @@ namespace IoTDevice.Repository
 {
     public interface IDeviceRepository
     {
-        Task AddDevice(DeviceRequest device);
+        Task<DeviceResponse> AddDevice(DeviceRequest device);
 
-        Task UpdateDevice(DeviceRequest device);
+        Task<DeviceResponse> UpdateDevice(DeviceRequest device);
 
-        Task DeleteDevice(int id);
+        Task<DeviceResponse> DeleteDevice(int id);
 
         Task<IEnumerable<DeviceResponse>> GetDevices();
 
