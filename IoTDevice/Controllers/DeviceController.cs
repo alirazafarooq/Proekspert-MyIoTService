@@ -18,6 +18,10 @@ namespace IoTDevice.Controllers
             deviceRepository = new DeviceRepository(dBContext);
         }
 
+        /// <summary>
+        /// This method is responsible to return all the IoT devices.
+        /// </summary>
+        /// <returns>Json object contains a list of IoT devices</returns>
         [HttpGet("getall")]
         public async Task<IActionResult> GetDevices()
         {
@@ -25,6 +29,11 @@ namespace IoTDevice.Controllers
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// This method is responsible to return an IoT device using Id as device serial number.
+        /// </summary>
+        /// <param name="id">Positive integer representing device serial number</param>
+        /// <returns>Json object contains IoT device data</returns>
         [HttpGet]
         public async Task<IActionResult> GetDevice(int id)
         {
@@ -39,6 +48,11 @@ namespace IoTDevice.Controllers
             }
         }
 
+        /// <summary>
+        /// This method is responsible to generate an IoT device.
+        /// </summary>
+        /// <param name="device">Json Object contains the data about IoT device</param>
+        /// <returns>Json object contains device data</returns>
         [HttpPost]
         public async Task<IActionResult> AddDevice(DeviceRequest device)
         {
@@ -53,6 +67,11 @@ namespace IoTDevice.Controllers
             }
         }
 
+        /// <summary>
+        /// This method is responsible to update the existing device data.
+        /// </summary>
+        /// <param name="device">Json Object contains the new data about IoT device</param>
+        /// <returns>Json object contains updated device data</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateDevice(DeviceRequest device)
         {
@@ -67,6 +86,11 @@ namespace IoTDevice.Controllers
             }
         }
 
+        /// <summary>
+        /// This method is responsible to delete the existing device using Id.
+        /// </summary>
+        /// <param name="id">Positive integer representing device serial number</param>
+        /// <returns>Json object contains updated device data</returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteDevice(int id)
         {
